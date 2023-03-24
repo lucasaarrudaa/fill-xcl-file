@@ -1,4 +1,5 @@
 import openpyxl
+import re 
 
 entrada = openpyxl.load_workbook('Teste_Entradas.xlsx', data_only=True)
 
@@ -120,8 +121,6 @@ def insert_values(ws_1, cords_1_from, cords_1_to, ws_2, cords_2_from, cords_2_to
     for c, v in zip(ws_to, ws_from):
         fill_cell(ws_2, c, v)
 
-insert_values(cclops, 'c2', 'm2', resumo, 'c6', 'm6' )
-
 def insert_values_formatted(ws_1, cords_1_from, cords_1_to, ws_2, cords_2_from, cords_2_to, decimals):
     '''
     Insere valores de duas sheets em uma planilha do excel
@@ -153,7 +152,10 @@ def insert_values_formatted(ws_1, cords_1_from, cords_1_to, ws_2, cords_2_from, 
     for c, v in zip(ws_to, ws_from):
         fill_cell(ws_2, c, v)
         
-def insert_values_brl(ws_1, cords_1_from, cords_1_to, ws_2, cords_2_from, cords_2_to, decimals):
+def total_per_month():
+    pass
+
+def insert_values_brl(ws_1, cords_1_from, cords_1_to, ws_2, cords_2_from, cords_2_to):
     '''
     Insere valores de duas sheets em uma planilha do excel
     
@@ -172,24 +174,31 @@ def insert_values_brl(ws_1, cords_1_from, cords_1_to, ws_2, cords_2_from, cords_
             NOTE: em colunas merged, tem que inserir na linha de superior e esquerda, se houver merge horizontal.
     Returns:
     '''
+    
+    #inserting total c4, m4 
+    
     # generating list like: ['1', '2', '3']
     ws_from = get_values(ws_1, cords_1_from, cords_1_to)
-    
+    ws_to = get_cords(ws_2, cords_2_from, cords_2_to)
+
     for n in ws_from: 
         float(n) # convertendo para float
         round(n, 2) # arredondando para 2 casas decimais
-    ws_from_real = []
     
+    ws_from_real = []
     for n in ws_from:
         ws_from_real.append(brl(n))
-    # generating list like: ['C2', 'D2', 'E2']
-    ws_to = get_cords(ws_2, cords_2_from, cords_2_to)
     
     for c, v in zip(ws_to, ws_from_real):
         fill_cell(ws_2, c, v)
+
+# def total_months():
+    
+# total = get_cords(resumo, 'c4', 'm4')
+# receitas = get_values(resumo, 'b6', 'b8')
         
-        
-insert_values_brl(cclops, 'c2', 'm2', resumo, 'c6', 'm6', 2)
-insert_values_brl(ccprod, 'e2', 'm2', resumo, 'e7', 'm7', 2)
-insert_values_brl(ccproj, 'c2', 'm2', resumo, 'c8', 'm8', 2)
-entrada.save('tst.xlsx')
+insert_values_brl(cclops, 'c2', 'm2', resumo, 'c6', 'm6')
+insert_values_brl(ccprod, 'e2', 'm2', resumo, 'e7', 'm7')
+insert_values_brl(ccproj, 'c2', 'm2', resumo, 'c8', 'm8')
+
+entrada.save('tss.xlsx')

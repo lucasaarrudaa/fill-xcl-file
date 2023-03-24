@@ -1,6 +1,6 @@
 import openpyxl
 
-entrada = openpyxl.load_workbook('excls\Teste_Entradas.xlsx', data_only=True)
+entrada = openpyxl.load_workbook('Teste_Entradas.xlsx', data_only=True)
 
 # selecting sheet
 cclops = entrada['CCLops']
@@ -23,7 +23,6 @@ def iterate_sheets(sheet, sheet_list, row_min, row_max, col_min=None, col_max=No
         for i in range(col_min, col_max):
             sheet_list.append('R$          {:,.2f}'.format(rows[i].value))  # NOTE: formatando
 
-
 def iterate_sheets_without_format(sheet, sheet_list, row_min, row_max, col_min=None, col_max=None):
     '''
     iteraing each column of each sheet(row 2) (without formatting)
@@ -41,9 +40,14 @@ def fill_cell(ws, cell, value):
     '''
     ws[f'{cell}'.upper()] = f'{value}'
 
+
 iterate_sheets(cclops, cols_cclops, 2, 2, 2, 14)
 iterate_sheets(ccprod, cols_ccprod, 2, 2, 2, 14)
 iterate_sheets(ccproj, cols_ccproj, 2, 2, 2, 14)
+
+print(cols_cclops)
+
+
 
 fill_cell(resumo, 'C6', cols_cclops[0])
 fill_cell(resumo, 'D6', cols_cclops[1])
@@ -81,110 +85,8 @@ fill_cell(resumo, 'K8', cols_ccproj[8])
 fill_cell(resumo, 'L8', cols_ccproj[9])
 fill_cell(resumo, 'M8', cols_ccproj[10])
   
-def total_jan():
-    
-    jan = \
-        entrada['CCLops'].cell(2,3).value
-        
-    jan = 'R$          {:,.2f}'.format(jan)
-    resumo.cell(4,3).value = str(jan)
-    
-def total_fev():
-    
-    fev = \
-        entrada['CCLops'].cell(2,4).value
-    fev = 'R$          {:,.2f}'.format(fev)
-    resumo.cell(4,4).value = str(fev)    
-    
-def total_mar():
-    
-    mar = \
-        entrada['CCLops'].cell(2,5).value + \
-        entrada['CCProd'].cell(2,3).value + \
-        entrada['CCProj'].cell(2,5).value
-        
-    mar = 'R$          {:,.2f}'.format(mar)
-    resumo.cell(4,5).value = str(mar)
+resumo[C4:] 
 
-def total_apr():
-    
-    apr = \
-        entrada['CCLops'].cell(2,6).value + \
-        entrada['CCProd'].cell(2,4).value + \
-        entrada['CCProj'].cell(2,6).value
-        
-    apr = 'R$          {:,.2f}'.format(apr)
-    resumo.cell(4,6).value = str(apr)
-
-def total_may():
-    
-    may = \
-        entrada['CCLops'].cell(2,7).value + \
-        entrada['CCProd'].cell(2,5).value + \
-        entrada['CCProj'].cell(2,7).value
-        
-    may = 'R$          {:,.2f}'.format(may)
-    resumo.cell(4,7).value = str(may)
-
-def total_jun():
-    
-    jun = \
-        entrada['CCLops'].cell(2,8).value + \
-        entrada['CCProd'].cell(2,6).value + \
-        entrada['CCProj'].cell(2,8).value
-        
-    jun = 'R$          {:,.2f}'.format(jun)
-    resumo.cell(4,8).value = str(jun)
-
-def total_jul():
-    
-    jul = \
-        entrada['CCLops'].cell(2,9).value + \
-        entrada['CCProd'].cell(2,7).value + \
-        entrada['CCProj'].cell(2,9).value
-        
-    jul = 'R$          {:,.2f}'.format(jul)
-    resumo.cell(4,9).value = str(jul)
-
-def total_aug():
-    
-    aug = \
-        entrada['CCLops'].cell(2,10).value + \
-        entrada['CCProd'].cell(2,8).value + \
-        entrada['CCProj'].cell(2,10).value
-        
-    aug = 'R$          {:,.2f}'.format(aug)
-    resumo.cell(4,10).value = str(aug)
-
-def total_sep():
-    
-    sep = \
-        entrada['CCLops'].cell(2,11).value + \
-        entrada['CCProd'].cell(2,9).value + \
-        entrada['CCProj'].cell(2,11).value
-        
-    sep = 'R$          {:,.2f}'.format(sep)
-    resumo.cell(4,11).value = str(sep)
-    
-def total_oct():
-    
-    oct = \
-        entrada['CCLops'].cell(2,12).value + \
-        entrada['CCProd'].cell(2,10).value + \
-        entrada['CCProj'].cell(2,12).value
-        
-    oct = 'R$          {:,.2f}'.format(oct)
-    resumo.cell(4,12).value = str(oct)
-    
-def total_nov():
-    
-    nov = \
-        entrada['CCLops'].cell(2,13).value + \
-        entrada['CCProd'].cell(2,11).value + \
-        entrada['CCProj'].cell(2,13).value
-        
-    nov = 'R$          {:,.2f}'.format(nov)
-    resumo.cell(4,13).value = str(nov)
     
 total_jan()
 total_fev()
@@ -198,4 +100,4 @@ total_sep()
 total_oct()
 total_nov()
     
-entrada.save('tst.xlsx')
+# entrada.save('tst.xlsx')
