@@ -1,14 +1,14 @@
 import openpyxl
 
-entrada = openpyxl.load_workbook('Teste_Entradas.xlsx', data_only=True)
+entrada = openpyxl.load_workbook('entrada/Teste_Entradas.xlsx', data_only=True)
 
-# selecting sheet
+#selecting sheet
 cclops = entrada['CCLops']
 ccprod = entrada['CCProd']
 ccproj = entrada['CCProj']
 resumo = entrada['Resumo']
 
-# list of columns
+#list of columns
 cols_cclops = []
 cols_ccprod = []
 cols_ccproj = []
@@ -40,64 +40,51 @@ def fill_cell(ws, cell, value):
     '''
     ws[f'{cell}'.upper()] = f'{value}'
 
-
 iterate_sheets(cclops, cols_cclops, 2, 2, 2, 14)
 iterate_sheets(ccprod, cols_ccprod, 2, 2, 2, 14)
 iterate_sheets(ccproj, cols_ccproj, 2, 2, 2, 14)
 
-print(cols_cclops)
+''' Loop to go through the cells and their respective values
+create a list of the cells you want to populate and their data'''
+cells = [('C6', cols_cclops), ('D6', cols_cclops[1:]), ('C7', cols_ccprod), ('D7', cols_ccprod[1:]), ('C8', cols_ccproj), ('D8', cols_ccproj[1:])]
 
-
-
-fill_cell(resumo, 'C6', cols_cclops[0])
-fill_cell(resumo, 'D6', cols_cclops[1])
-fill_cell(resumo, 'E6', cols_cclops[2])
-fill_cell(resumo, 'F6', cols_cclops[3])
-fill_cell(resumo, 'G6', cols_cclops[4])
-fill_cell(resumo, 'H6', cols_cclops[5])
-fill_cell(resumo, 'I6', cols_cclops[6])
-fill_cell(resumo, 'J6', cols_cclops[7])
-fill_cell(resumo, 'K6', cols_cclops[8])
-fill_cell(resumo, 'L6', cols_cclops[9])
-fill_cell(resumo, 'M6', cols_cclops[10])
-
-fill_cell(resumo, 'C7', cols_ccprod[0])
-fill_cell(resumo, 'D7', cols_ccprod[1])
-fill_cell(resumo, 'E7', cols_ccprod[2])
-fill_cell(resumo, 'F7', cols_ccprod[3])
-fill_cell(resumo, 'G7', cols_ccprod[4])
-fill_cell(resumo, 'H7', cols_ccprod[5])
-fill_cell(resumo, 'I7', cols_ccprod[6])
-fill_cell(resumo, 'J7', cols_ccprod[7])
-fill_cell(resumo, 'K7', cols_ccprod[8])
-fill_cell(resumo, 'L7', cols_ccprod[9])
-fill_cell(resumo, 'M7', cols_ccprod[10])
-
-fill_cell(resumo, 'C8', cols_ccproj[0])
-fill_cell(resumo, 'D8', cols_ccproj[1])
-fill_cell(resumo, 'E8', cols_ccproj[2])
-fill_cell(resumo, 'F8', cols_ccproj[3])
-fill_cell(resumo, 'G8', cols_ccproj[4])
-fill_cell(resumo, 'H8', cols_ccproj[5])
-fill_cell(resumo, 'I8', cols_ccproj[6])
-fill_cell(resumo, 'J8', cols_ccproj[7])
-fill_cell(resumo, 'K8', cols_ccproj[8])
-fill_cell(resumo, 'L8', cols_ccproj[9])
-fill_cell(resumo, 'M8', cols_ccproj[10])
+#loop through this list and fill each cell with its corresponding data
+for cell, data in cells:
+    for i, value in enumerate(data):
+        fill_cell(resumo, chr(ord(cell[0])+i) + cell[1:], value)
   
-resumo[C4:] 
+def total_jan_fev(mes, ops_col, prod_col, proj_col):
+    
+    ops = entrada['CCLops'].cell(2, ops_col).value
+    prod = entrada['CCProd'].cell(2, prod_col).value
+    proj = entrada['CCProj'].cell(2, proj_col).value
+    
+    total = ops + prod + proj
+    
+    total_formatado = 'R$ {:,.2f}'.format(total)
+    
+    resumo.cell(4, mes).value = total_formatado
+    
+total_jan_fev(3, 3, 3, 5)  # Janeiro
+total_jan_fev(4, 4, 4, 6)  # Fevereiro
 
-    
-total_jan()
-total_fev()
-total_mar()
-total_apr()
-total_may()
-total_jun()
-total_jul()
-total_aug()
-total_sep()
-total_oct()
-total_nov()
-    
-# entrada.save('tst.xlsx')
+'''
+This code defines a list of tuples for categories and a list of tuples for months. 
+It then uses a loop to iterate through the months and categories and calculate each 
+month's total using a sum() function and a generator expression. Finally, 
+it formats the total as a string and writes it to the corresponding cell in the summary worksheet.
+'''    
+
+# Define a list of tuples with the sheet names and column indices for each category
+categories = [('CCLops', 5), ('CCProd', 3), ('CCProj', 5)]
+
+# Define a list of month names and corresponding column indices
+months = [('Mar', 5), ('Apr', 6), ('May', 7), ('Jun', 8), ('Jul', 9), ('Aug', 10), ('Sep', 11), ('Oct', 12), ('Nov', 13)]
+
+# Iterate over the months and categories to calculate the total for each month
+for month, col in months:
+    total = sum(entrada[cat].cell(2, col).value for cat, col in categories)
+    total = 'R$ {:,.2f}'.format(total)
+    resumo.cell(4, col).value = total
+
+entrada.save('entradas.xlsx')
