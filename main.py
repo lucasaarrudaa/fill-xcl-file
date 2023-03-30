@@ -1,6 +1,6 @@
 import openpyxl
 
-entrada = openpyxl.load_workbook('entrada/Teste_Entradas.xlsx', data_only=True)
+entrada = openpyxl.load_workbook('xcl_file\Teste_Entradas.xlsx', data_only=True)
 
 #selecting sheet
 cclops = entrada['CCLops']
