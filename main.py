@@ -74,7 +74,6 @@ It then uses a loop to iterate through the months and categories and calculate e
 month's total using a sum() function and a generator expression. Finally, 
 it formats the total as a string and writes it to the corresponding cell in the summary worksheet.
 '''    
-
 # Define a list of tuples with the sheet names and column indices for each category
 categories = [('CCLops', 5), ('CCProd', 3), ('CCProj', 5)]
 
