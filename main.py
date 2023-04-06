@@ -65,26 +65,27 @@ def total_jan_fev(mes, ops_col, prod_col, proj_col):
     
     resumo.cell(4, mes).value = total_formatado
     
+def other_months():
+    '''
+    This code defines a list of tuples for categories and a list of tuples for months. 
+    It then uses a loop to iterate through the months and categories and calculate each 
+    month's total using a sum() function and a generator expression. Finally, 
+    it formats the total as a string and writes it to the corresponding cell in the summary worksheet.
+    '''    
+    # Define a list of tuples with the sheet names and column indices for each category
+    categories = [('CCLops', 5), ('CCProd', 3), ('CCProj', 5)]
+
+    # Define a list of month names and corresponding column indices
+    months = [('Mar', 5), ('Apr', 6), ('May', 7), ('Jun', 8), ('Jul', 9), ('Aug', 10), ('Sep', 11), ('Oct', 12), ('Nov', 13)]
+
+    # Iterate over the months and categories to calculate the total for each month
+    for month, col in months:
+        total = sum(entrada[cat].cell(2, col).value for cat, col in categories)
+        total = 'R$ {:,.2f}'.format(total)
+        resumo.cell(4, col).value = total
+    
 total_jan_fev(3, 3, 3, 5)  # Janeiro
 total_jan_fev(4, 4, 4, 6)  # Fevereiro
-
-'''
-This code defines a list of tuples for categories and a list of tuples for months. 
-It then uses a loop to iterate through the months and categories and calculate each 
-month's total using a sum() function and a generator expression. Finally, 
-it formats the total as a string and writes it to the corresponding cell in the summary worksheet.
-'''    
-
-# Define a list of tuples with the sheet names and column indices for each category
-categories = [('CCLops', 5), ('CCProd', 3), ('CCProj', 5)]
-
-# Define a list of month names and corresponding column indices
-months = [('Mar', 5), ('Apr', 6), ('May', 7), ('Jun', 8), ('Jul', 9), ('Aug', 10), ('Sep', 11), ('Oct', 12), ('Nov', 13)]
-
-# Iterate over the months and categories to calculate the total for each month
-for month, col in months:
-    total = sum(entrada[cat].cell(2, col).value for cat, col in categories)
-    total = 'R$ {:,.2f}'.format(total)
-    resumo.cell(4, col).value = total
+other_months()
 
 entrada.save('entradas.xlsx')
